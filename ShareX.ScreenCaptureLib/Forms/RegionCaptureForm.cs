@@ -154,9 +154,12 @@ namespace ShareX.ScreenCaptureLib
                 };
             }
 
-            borderPen = new Pen(Color.Black);
-            borderDotPen = new Pen(Color.White) { DashPattern = new float[] { 5, 5 } };
-            borderDotStaticPen = new Pen(Color.White) { DashPattern = new float[] { 5, 5 } };
+            borderPen = new Pen(Color.FromArgb(202, 255, 138));
+            borderDotPen = new Pen(Color.FromArgb(202, 255, 138));
+            borderDotStaticPen = new Pen(Color.FromArgb(202, 255, 138));
+            // borderPen = new Pen(Color.Black);
+            // borderDotPen = new Pen(Color.White) { DashPattern = new float[] { 5, 5 } };
+            // borderDotStaticPen = new Pen(Color.White) { DashPattern = new float[] { 5, 5 } };
             infoFont = new Font("Verdana", 9);
             infoFontMedium = new Font("Verdana", 12);
             infoFontBig = new Font("Verdana", 16, FontStyle.Bold);
