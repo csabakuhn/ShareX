@@ -1039,7 +1039,10 @@ namespace ShareX.ScreenCaptureLib
                     g.DrawCross(Pens.White, ShapeManager.CurrentRectangle.Center(), 10);
                 }
 
-                DrawRegionArea(g, ShapeManager.CurrentRectangle, true);
+                if (ShapeManager.CurrentShape.ShapeType == ShapeType.RegionRectangle)
+                {
+                    DrawRegionArea(g, ShapeManager.CurrentRectangle, true);
+                }
             }
 
             // Draw all regions rectangle info
