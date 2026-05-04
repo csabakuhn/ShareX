@@ -18,6 +18,7 @@
                 components.Dispose();
             }
 
+            DisposeFileWatcher();
             ClearThumbnail();
 
             base.Dispose(disposing);

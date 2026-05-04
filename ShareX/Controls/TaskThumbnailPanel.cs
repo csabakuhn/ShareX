@@ -28,6 +28,7 @@ using ShareX.Properties;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ShareX
@@ -96,6 +97,8 @@ namespace ShareX
 
         public delegate void TaskThumbnailPanelEventHandler(TaskThumbnailPanel panel);
         public event TaskThumbnailPanelEventHandler ImagePreviewRequested;
+
+        private FileSystemWatcher fileWatcher;
 
         public WorkerTask Task { get; private set; }
 
@@ -323,6 +326,27 @@ namespace ShareX
                 try
                 {
                     string filePath = Task.Info.FilePath;
+
+                    // Ha más fájlra vált, reseteljük a watchert
+                    if (fileWatcher != null && fileWatcher.Filter != Path.GetFileName(filePath))
+                    {
+                        DisposeFileWatcher();
+                    }
+
+                    // start FileSystemWatcher and if the file exists
+                    if (fileWatcher == null && !string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+                    {
+                        fileWatcher = new FileSystemWatcher();
+                        fileWatcher.Path = Path.GetDirectoryName(filePath);
+                        fileWatcher.Filter = Path.GetFileName(filePath);
+                        fileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+                        fileWatcher.Changed += (s, e) =>
+                        {
+                            Thread.Sleep(500);
+                            pbThumbnail.Invoke((MethodInvoker)(() => UpdateThumbnail()));
+                        };
+                        fileWatcher.EnableRaisingEvents = true;
+                    }
 
                     if (ClickAction != ThumbnailViewClickAction.Select && !string.IsNullOrEmpty(filePath) && File.Exists(filePath))
                     {
@@ -653,6 +677,16 @@ namespace ShareX
             e.DrawBackground();
             e.DrawBorder();
             e.DrawText();
+        }
+
+        private void DisposeFileWatcher()
+        {
+            if (fileWatcher != null)
+            {
+                fileWatcher.EnableRaisingEvents = false;
+                fileWatcher.Dispose();
+                fileWatcher = null; // Important to set to null
+            }
         }
     }
 }
