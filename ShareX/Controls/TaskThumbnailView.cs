@@ -357,7 +357,7 @@ namespace ShareX
             {
                 int systemLines = SystemInformation.MouseWheelScrollLines;
                 if (systemLines <= 0) systemLines = 3;
-                int scrollAmount = systemLines * 16;
+                int scrollAmount = systemLines * 100;
                 int delta = Math.Sign(-e.Delta) * scrollAmount;
                 int newValue = Math.Max(0, Math.Min(sbMain.Maximum, sbMain.Value + delta));
                 sbMain.Value = newValue;
